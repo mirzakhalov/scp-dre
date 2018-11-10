@@ -7,7 +7,7 @@ export default class Stream extends React.Component {
     return (
       
       <View style={styles.container}>
-   
+          <Text>Hello, You are in the Stream Page</Text> 
       </View>
       
     );

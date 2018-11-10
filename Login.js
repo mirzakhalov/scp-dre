@@ -4,7 +4,7 @@
 *  To be able to run the app, run "npm install firebase --save"
 */
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, TextInput, Button, Image, KeyboardAvoidingView} from 'react-native';
 import * as firebase from 'firebase';
 
 // firebase configurations for the project
@@ -36,26 +36,43 @@ export default class Login extends React.Component {
       age: 0,
       // variable for the school, defaults to empty
       school: "",
+
+      name: "",
+
+      age: "",
+
+      school: "",
     }
+
+    this._navigate.bind(this);
+
   }
 
   // Firebase Team:
   
-  // after firebase is initialized, grab all the usernames from the database and compare them against the "username" given by the user
-  // If it already exists, set "username" in the screen to error and say it exists
-  // If it doesn't exist, call _registerUser
-  _checkIfUsernameExists(){
-    //TODO
-  }
-
   // make a json object of the user, and push it to the database. User 'push' instead of 'set'. Then call _navigate to move to the next page
   _registerUser(){
-    //TODO
+   
+    const profile = {
+      name: this.state.name,
+      age: this.state.age,
+      school: this.state.school,
+    }
+    
+    if(profile.name == "" || profile.age == "" || profile.school == ""){
+        alert("All fields must be filled in");
+    }
+
+   database.ref("users/").push(profile);
+   this._navigate()
+
   }
 
   // DO NOT WRITE ANY CODE IN HERE YET // 
   _navigate(){
-
+   
+    const { navigate } = this.props.navigation;
+    navigate("Stream", {});
   }
 
   render() {
@@ -64,9 +81,49 @@ export default class Login extends React.Component {
       // Login Page Layout Team:
       // put all the layout elements inside this view i.e. all the text input boxes, buttons, all the styles
       //TODO
-      <View style={styles.container}>
-        <Text> You can do this for sure </Text>
-      </View>
+      <KeyboardAvoidingView 
+      style={styles.container}
+      behavior="padding">
+        <Image
+          source={{
+            uri: 'https://facebook.github.io/react/logo-og.png',
+            cache: 'only-if-cached',
+          }}
+          style={{width: 200, height: 200}}
+        />
+        <Text
+         style = {{marginBottom: 20, marginTop: 20,  fontSize: 30}}> D.R.E. </Text>
+        <TextInput
+          style={{height: 40, width: 250, borderColor: 'gray', backgroundColor: '#D3D3D3', borderWidth: 1, marginBottom: 10, paddingLeft: 5}}
+          onChangeText={(name) => this.setState({name})}
+          value={this.state.name}
+          placeholder = {"Name"}
+          placeholderTextColor = "black"
+          windowSoftInputMode = "adjustResize"
+        />
+        <TextInput
+          style={{height: 40, width: 250, borderColor: 'gray', backgroundColor: '#D3D3D3',  borderWidth: 1, marginBottom: 10, paddingLeft: 5}}
+          onChangeText={(age) => this.setState({age})}
+          value={this.state.age}
+          placeholder = {"Age"}
+          placeholderTextColor = "black"
+          windowSoftInputMode = "adjustResize"
+        />
+        <TextInput
+          style={{height: 40, width: 250, borderColor: 'gray', backgroundColor: '#D3D3D3', borderWidth: 1, marginBottom: 20, paddingLeft: 5}}
+          onChangeText={(school) => this.setState({school})}
+          value={this.state.school}
+          placeholder = {"School"}
+          placeholderTextColor = "black"
+          windowSoftInputMode = "adjustResize"
+        />
+
+        <Button
+          onPress={this._registerUser.bind(this)/*this._registerUser()*/}
+          title="Let's Get Started!!!"
+          color="#0066ff"
+        />
+      </KeyboardAvoidingView>
       //TODO
     );
   }
